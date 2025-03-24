@@ -68,7 +68,7 @@
 </head>
 <body>
     <header>
-        <img class="gallery-img" src="logo.jpg" alt="Logo LinkMaster" width="400" height="250">
+        <img class="gallery-img" src="logo.jpeg" alt="Logo LinkMaster" width="400" height="250">
         <h1>Bem-vindo ao <span class="highlight">LinkMaster</span></h1>
         <p>O seu Verificador de Links de Grupos de WhatsApp</p>
     </header>
