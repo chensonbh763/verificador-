@@ -13,22 +13,27 @@
             color: #333;
         }
         header {
-            background-color: #01DFB9; /* Alterado para o verde da logo */
+            background-color: #01DFB9; /* Cor verde da logo */
             color: #fff;
             text-align: center;
             padding: 20px;
         }
-
-        
+        header img {
+            max-width: 100%; /* Garantia de responsividade */
+            height: auto;
+            max-height: 150px;
+            display: block;
+            margin: 0 auto 20px;
+        }
         section {
             padding: 20px;
         }
         .highlight {
-            color: #01DFB9; /* Cor do texto destacada alterada para o verde da logo */
+            color: #01DFB9; /* Cor do texto destacada */
             font-weight: bold;
         }
         .cta {
-            background-color: #FF5722; /* Cor laranja destacada */
+            background-color: #01DFB9; /* Cor alterada para o verde do site */
             color: #fff;
             padding: 15px 30px;
             text-align: center;
@@ -37,10 +42,11 @@
             display: inline-block;
             font-size: 18px;
             margin: 20px auto;
-            text-align: center;
+            width: auto; /* Ajusta para caber em qualquer dispositivo */
+            transition: background-color 0.3s ease; /* Animação para hover */
         }
         .cta:hover {
-            background-color: #E64A19;
+            background-color: #019c8b; /* Cor ligeiramente mais escura ao passar o mouse */
         }
         footer {
             background-color: #333;
@@ -50,20 +56,30 @@
             margin-top: 20px;
         }
         @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5em; /* Título menor em telas pequenas */
+            }
+            header p {
+                font-size: 1em; /* Ajusta tamanho do parágrafo */
+            }
             section {
-                padding: 10px; /* Reduz o espaçamento em telas menores */
-                text-align: center; /* Centraliza o texto em dispositivos móveis */
+                padding: 10px; /* Reduz espaçamento em dispositivos menores */
+                text-align: center; /* Centraliza o texto */
+            }
+            ul {
+                padding-left: 0; /* Remove recuo dos itens de lista */
+                list-style-position: inside; /* Estiliza melhor as listas */
             }
             .cta {
-                font-size: 16px; /* Ajusta o tamanho do botão para dispositivos menores */
-                width: 80%; /* Centraliza e ajusta largura do botão */
+                font-size: 16px; /* Tamanho reduzido do botão */
+                width: 90%; /* Ajusta a largura do botão para telas pequenas */
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <img src="https://raw.githubusercontent.com/chensonbh763/verificador-/main/logo.jpeg" alt="Logo LinkMaster" width="400" height="250">
+        <img src="https://raw.githubusercontent.com/chensonbh763/verificador-/main/logo.jpeg" alt="Logo LinkMaster">
         <h1>Bem-vindo ao <span class="highlight">LinkMaster</span></h1>
         <p>O seu Verificador de Links de Grupos de WhatsApp</p>
     </header>
