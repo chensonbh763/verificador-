@@ -68,7 +68,7 @@
 </head>
 <body>
     <header>
-        <img src="https://i.ibb.co/7NTDftsC" alt="Logo LinkMaster">
+        <img src="https://raw.githubusercontent.com/chensonbh763/verificador-/main/logo.jpeg" alt="Logo LinkMaster" width="400" height="250">
         <h1>Bem-vindo ao <span class="highlight">LinkMaster</span></h1>
         <p>O seu Verificador de Links de Grupos de WhatsApp</p>
     </header>
