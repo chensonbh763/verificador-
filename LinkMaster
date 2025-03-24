@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkMaster - Verificador de Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50; /* Cor verde vibrante */
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        header img {
+            max-width: 100%; /* Garante que o logo seja responsivo */
+            height: auto;
+            max-height: 150px;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        section {
+            padding: 20px;
+        }
+        .highlight {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .cta {
+            background-color: #FF5722; /* Cor laranja destacada */
+            color: #fff;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            font-size: 18px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .cta:hover {
+            background-color: #E64A19;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) {
+            section {
+                padding: 10px; /* Reduz o espaçamento em telas menores */
+                text-align: center; /* Centraliza o texto em dispositivos móveis */
+            }
+            .cta {
+                font-size: 16px; /* Ajusta o tamanho do botão para dispositivos menores */
+                width: 80%; /* Centraliza e ajusta largura do botão */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://i.ibb.co/7NTDftsC" alt="Logo LinkMaster">
+        <h1>Bem-vindo ao <span class="highlight">LinkMaster</span></h1>
+        <p>O seu Verificador de Links de Grupos de WhatsApp</p>
+    </header>
+    <section>
+        <h2>💡 Você sabia?</h2>
+        <p>Divulgar links inativos ou expirados pode prejudicar suas campanhas e reduzir seus resultados.</p>
+        <p>Com o <span class="highlight">LinkMaster</span>, você economiza tempo e garante que seus links estão sempre ativos!</p>
+        <h2>O que você ganha ao adquirir o <span class="highlight">LinkMaster?</span></h2>
+        <ul>
+            <li>🔧 <b>Ferramenta de verificação automática:</b> Teste links rapidamente e com eficiência.</li>
+            <li>✅ <b>100 links válidos de WhatsApp:</b> Prontos para divulgar e começar suas campanhas imediatamente.</li>
+        </ul>
+        <h2>Por que escolher o <span class="highlight">LinkMaster?</span></h2>
+        <ul>
+            <li>⏱️ <b>Economize tempo:</b> Chega de testar manualmente cada link.</li>
+            <li>📊 <b>Resultados precisos:</b> Verificação automática e confiável em tempo real.</li>
+            <li>👌 <b>Praticidade:</b> Receba 100 links válidos e já testados!</li>
+        </ul>
+        <p><b>Transforme suas campanhas de marketing e conquiste resultados excepcionais!</b></p>
+        <a href="https://app.monetizze.com.br/checkout/DAT337330?src=site" class="cta">Adquirir Agora por R$ 15</a>
+    </section>
+    <footer>
+        <p>&copy; 2025 LinkMaster. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
