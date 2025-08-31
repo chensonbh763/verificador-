@@ -146,6 +146,8 @@ def atualizar_permitidos(dados):
 def webhook_cakto():
     try:
         dados = request.get_json()
+        print("Payload recebido:", dados)  # 👈 Adicione isso
+
         if dados.get('status', '').lower() == 'paid':
             atualizar_permitidos(dados)
             return jsonify({"message": "Dados do comprador registrados com sucesso."}), 200
@@ -157,3 +159,4 @@ def webhook_cakto():
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=5000)
+
