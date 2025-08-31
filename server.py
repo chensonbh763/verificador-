@@ -5,8 +5,9 @@ import requests
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
 import logging
+import os
 
-# Configuração de logging para salvar erros
+# Configuração de logging
 logging.basicConfig(
     filename="erros.log",
     level=logging.ERROR,
@@ -14,31 +15,26 @@ logging.basicConfig(
 )
 
 app = Flask(__name__)
-
-# Configuração do CORS para permitir acesso de qualquer origem
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-# Função para obter o IP do usuário
+CSV_PATH = 'permitidos.csv'
+
+# Função para obter IP do usuário
 def obter_ip():
     return request.remote_addr
 
 # Função para verificar acesso
 def verificar_acesso(email, cpf=None, id_venda=None):
     try:
-        # Lista de e-mails permitidos
         permitidos = []
-        with open('permitidos.csv', mode='r', encoding='utf-8') as file:
-            leitor_csv = csv.DictReader(file)  # Lê o CSV como dicionário
+        with open(CSV_PATH, mode='r', encoding='utf-8') as file:
+            leitor_csv = csv.DictReader(file)
             for linha in leitor_csv:
-                # Filtrar vendas com "Status da Venda = paid"
-                if linha['Status da Venda'].strip().lower() == 'paid':
-                    permitidos.append(linha['Email do Cliente'].strip())
+                permitidos.append(linha['Email'])
 
-        # Verificar se o e-mail está na lista permitida
         if email not in permitidos:
             return False, "E-mail não permitido."
 
-        # Ler controledeacesso.txt para verificar tentativas anteriores
         try:
             with open('controledeacesso.txt', mode='r', encoding='utf-8') as file:
                 controle = [line.strip().split() for line in file]
@@ -47,7 +43,6 @@ def verificar_acesso(email, cpf=None, id_venda=None):
 
         ip = obter_ip()
 
-        # Verificar condições de acesso
         for registro in controle:
             if registro[0] == email:
                 if registro[1] == ip:
@@ -60,7 +55,6 @@ def verificar_acesso(email, cpf=None, id_venda=None):
                     else:
                         return False, "CPF e ID da venda são necessários."
 
-        # Registrar novo acesso
         with open('controledeacesso.txt', mode='a', encoding='utf-8') as file:
             file.write(f"{email} {ip}\n")
 
@@ -77,19 +71,6 @@ def login():
 
     print(f"Recebido: email={email}, cpf={cpf}, id_venda={id_venda}")
 
-    # Depurar a leitura do CSV para garantir e-mails válidos
-    try:
-        permitidos = []
-        with open('permitidos.csv', mode='r', encoding='utf-8') as file:
-            leitor_csv = csv.DictReader(file)
-            for linha in leitor_csv:
-                if linha['Status da Venda'].strip().lower() == 'paid':
-                    permitidos.append(linha['Email do Cliente'].strip())
-        print(f"E-mails permitidos: {permitidos}")
-    except Exception as e:
-        print(f"Erro ao ler o arquivo CSV: {str(e)}")
-
-    # Verificar acesso
     sucesso, mensagem = verificar_acesso(email, cpf, id_venda)
     if sucesso:
         return jsonify({"message": mensagem})
@@ -97,7 +78,7 @@ def login():
         print(f"Erro: {mensagem}")
         return jsonify({"error": mensagem}), 403
 
-# Função que verifica se o link é válido
+# Verificação de links
 def verificar_link(link):
     try:
         resposta = requests.get(link, timeout=10)
@@ -112,21 +93,17 @@ def verificar_link(link):
         logging.error(f"Erro ao verificar o link {link}: {e}")
         return None, link
 
-# Rota Flask para verificar os links via HTTP
 @app.route('/verificar', methods=['POST'])
 def verificar_links_via_http():
-    dados = request.get_json()  # Recebe os dados em formato JSON
+    dados = request.get_json()
     lista_links = dados.get('links', [])
     if not lista_links:
         return jsonify({"error": "Nenhum link fornecido"}), 400
 
     categorias = {}
-
-    # Usar ThreadPoolExecutor para paralelizar as verificações
     with ThreadPoolExecutor() as executor:
         resultados = list(executor.map(verificar_link, lista_links))
 
-    # Organizar os links por categorias
     for nome_grupo, link in resultados:
         if nome_grupo:
             if nome_grupo not in categorias:
@@ -135,6 +112,48 @@ def verificar_links_via_http():
 
     return jsonify(categorias)
 
-# Rodando o Flask server
+# Atualiza permitidos.csv com todos os dados do comprador
+def atualizar_permitidos(dados):
+    caminho_csv = CSV_PATH
+    campos = ['Email', 'Nome', 'CPF', 'ID da Venda', 'Valor', 'Data']
+
+    arquivo_existe = os.path.exists(caminho_csv)
+    email = dados.get('email', '')
+
+    # Verifica se o email já está registrado
+    emails_existentes = set()
+    if arquivo_existe:
+        with open(caminho_csv, mode='r', encoding='utf-8') as file:
+            leitor = csv.DictReader(file)
+            for linha in leitor:
+                emails_existentes.add(linha['Email'])
+
+    if email not in emails_existentes:
+        with open(caminho_csv, mode='a', encoding='utf-8', newline='') as file:
+            escritor = csv.DictWriter(file, fieldnames=campos)
+            if not arquivo_existe:
+                escritor.writeheader()
+            escritor.writerow({
+                'Email': email,
+                'Nome': dados.get('nome', ''),
+                'CPF': dados.get('cpf', ''),
+                'ID da Venda': dados.get('id_venda', ''),
+                'Valor': dados.get('valor', ''),
+                'Data': dados.get('data', '')
+            })
+
+@app.route('/webhook/cakto', methods=['POST'])
+def webhook_cakto():
+    try:
+        dados = request.get_json()
+        if dados.get('status', '').lower() == 'paid':
+            atualizar_permitidos(dados)
+            return jsonify({"message": "Dados do comprador registrados com sucesso."}), 200
+        else:
+            return jsonify({"error": "Venda não está paga ou dados incompletos."}), 400
+    except Exception as e:
+        logging.error(f"Erro no Webhook: {str(e)}")
+        return jsonify({"error": "Erro interno no servidor."}), 500
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=5000)
